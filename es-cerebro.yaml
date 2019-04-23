@@ -16,10 +16,9 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: cerebro-v0
+  name: cerebro
   labels:
     k8s-app: cerebro
-    version: v0
 spec:
   strategy:
     type: RollingUpdate
@@ -30,11 +29,10 @@ spec:
     metadata:
       labels:
         k8s-app: cerebro
-        version: v0
     spec:
       containers:
       - name: cerebro
-        image: kayrus/docker-elasticsearch-cerebro:0.6.5
+        image: yannart/cerebro:latest
         imagePullPolicy: Always
         readinessProbe:
           httpGet:
@@ -42,12 +40,6 @@ spec:
             port: 9000
           timeoutSeconds: 1
           successThreshold: 1
-        env:
-          - name: ELASTICSEARCH_URL
-            valueFrom:
-              configMapKeyRef:
-                name: es-env
-                key: es-client-endpoint
         ports:
         - containerPort: 9000
           name: ui
